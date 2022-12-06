@@ -58,11 +58,9 @@
     </br>
     - (Not Recommended) Using a query to create the user:
 
-        ``` SQL
+        ```SQL
         CREATE DATABASE northwind;
-
         CREATE USER 'fred'@'localhost' IDENTIFIED BY 'password@123456';
-
         GRANT ALL privileges ON *.* TO 'fred'@'localhost' with grant option;
         ```
 
@@ -179,3 +177,69 @@ public class RsvpRepo {
 ```
 
 Of course, more complicated queries can be constructed. It all depends on the dataset and it's storage complexity.
+
+### SQL Queries
+
+#### Types of Joins
+
+There are 4 types of basic joins.
+
+1. Inner Join
+2. Left Join
+3. Right Join
+4. Outer Join (Full Join)
+
+#### Inner Join
+
+Inner join is the default join. -- It need not be specified in the query.
+
+It gives back a set of data that is common to both tables and leaves the rest out. There should not be any `null` values. If it returns `null` means the tables have nothing related to each other.
+
+> A great resource is [this sql doodler](https://joins.spathon.com/)
+
+Lets say we have a 2 tables that looks like this:
+
+Users
+| ID  | Name   |
+| --- | ------ |
+| 1   | user01 |
+| 2   | user02 |
+| 3   | user03 |
+| 4   | user04 |
+| 5   | user05 |
+
+Likes
+| user_id | Like        |
+| ------- | ----------- |
+| 1       | Climbing    |
+| 1       | Coding      |
+| 3       | Star Gazing |
+| 4       | Fruits      |
+| 6       | Sports      |
+
+The query looks like this:
+
+```SQL
+SELECT users.name, likes.like
+FROM users JOIN likes
+ON users.id = likes.user_id;
+```
+
+Breakdown:
+`SELECT users.name, likes.like` : "I want data from the `name` column in the `users` table and the `like` column in the `likes` table"
+
+`FROM users JOIN likes` : "From a table where `users` is joined with `likes`"
+
+`ON users.id = likes.user_id` : "where the `id` of the user table matches the `user_id` of the likes table"
+
+This is the query result:
+
+| name   | likes       |
+| ------ | ----------- |
+| user03 | Star Gazing |
+| user01 | Climbing    |
+| user01 | Coding      |
+| user04 | Fruits      |
+
+Notice that `user02`, `user05` and `Sports` aren't part of the result. This is a property of inner joins.
+Inner Joins drops all non-relatable data and only gives you whatever that matches.
