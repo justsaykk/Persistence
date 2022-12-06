@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Order Form</title>
+</head>
+
+<body>
+    <h1>Order Form</h1>
+    <form action="/order" method="post">
+        <table class="order">
+            <tr>
+                <td>Date</td>
+                <td><input type="date" name="orderDate" id="order_date"></td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td><input type="text" name="customerName" id="customer_name"></td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td><input type="text" name="shipAddress" id="ship_address"></td>
+            </tr>
+            <tr>
+                <td>Notes</td>
+                <td><input type="text" name="notes" id="notes"></td>
+            </tr>
+        </table>
+        </br>
+        <table class="orderDetails">
+            <thead>
+                <tr>
+                    <td>Product</td>
+                    <td>Price</td>
+                    <td>Discount</td>
+                    <td>Quantity</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="product" id="product"></td>
+                    <td><input type="number" name="unitPrice" id="unit_price"></td>
+                    <td><input type="number" name="discount" id="discount"></td>
+                    <td><input type="number" name="quantity" id="quantity"></td>
+                </tr>
+                <!-- <tr>
+                    <td><input type="text" name="product2" id="product"></td>
+                    <td><input type="number" name="unitPrice2" id="unit_price"></td>
+                    <td><input type="number" name="discount2" id="discount"></td>
+                    <td><input type="number" name="quantity2" id="quantity"></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="product2" id="product"></td>
+                    <td><input type="number" name="unitPrice2" id="unit_price"></td>
+                    <td><input type="number" name="discount2" id="discount"></td>
+                    <td><input type="number" name="quantity2" id="quantity"></td>
+                </tr> -->
+            </tbody>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>

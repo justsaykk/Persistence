@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/task" method="post">
+        <table>
+            <tr>
+                <td>Username</td>
+                <td><input type="text" name="username" id="username"></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input type="password" name="password" id="password"></td>
+            </tr>
+            <tr>
+                <td>Task Name</td>
+                <td><input type="text" name="taskname" id="taskname"></td>
+            </tr>
+            <tr>
+                <td>Priority</td>
+                <td>
+                    <select name="priority" id="priority">
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Due Date</td>
+                <td><input type="date" name="duedate" id="duedate"></td>
+            </tr>
+        </table>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>

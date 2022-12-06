@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/northwind
+    username: day21fred
+    password: ${SPRING_DATABASE_PASSWORD}
