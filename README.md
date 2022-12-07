@@ -75,7 +75,9 @@
     | --- | ------------ | ------------ | ------------ | ---- | ------------ |
     | int | varchar(255) | varchar(255) | varchar(255) | DATE | varchar(255) |
 
-    Now, the database is up and ready to receive information!
+    If there is an existing `.sql` file that has a bunch of `INSERT INTO` statements, we can open the file in workbench and run that file.
+
+    Otherwise, there's no other elegant way to seed a database. Good 'ol manual inserts.
 
     ---------------
 
@@ -99,6 +101,27 @@ Optionals:
 
 1. Thymeleaf -- To handle HTML pages
 2. Joda Time (from maven repo) -- To handle DateTime
+
+Dependency Code dump:
+
+```xml
+<!-- From Maven Repositories -->
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>8.0.31</version>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>jakarta.json</artifactId>
+        <version>2.0.1</version>
+    </dependency>
+    <dependency>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time</artifactId>
+        <version>2.12.2</version>
+    </dependency>
+```
 
 #### Configurations
 
@@ -180,6 +203,116 @@ Of course, more complicated queries can be constructed. It all depends on the da
 
 ### SQL Queries
 
+#### Operators & Structure of Queries
+
+##### Operators
+
+When Querying data from the table, most of the time, you would not want the entire table's data as it might contain thousand of rows. You just want the data that you need.
+To achieve this, we use operators to query for specific data. Lets take a look at some of the available operators:
+
+Logical
+
+1. `AND`
+2. `OR`
+3. `NOT`
+
+Comparisons
+
+1. `>` Greater than
+2. `<` Less than
+3. `<=` Less than or equal to
+4. `>=` Greater than or equal to
+5. `<>` Not equal to
+6. `=` Equal to
+
+##### Structure of a Query (mySQL)
+
+Every version/iteration of a SQL language is like a dialect if SQL. They follow a certain pattern but it all leads to the same outcome. In this note, we are exploring mySQL. Other SQL platforms may have other synthax requirements.
+
+To start the ball rolling, first is always to select your required data:
+
+```SQL
+    SELECT rating
+```
+
+Next is to tell the program where to get the data:
+
+```SQL
+    SELECT rating FROM tv_shows
+```
+
+And then add the constrains of the search using the `WHERE` keyword:
+
+```SQL
+    SELECT rating FROM tv_shows
+    WHERE lang LIKE 'Mandarin'
+```
+
+The above query will return 1 column with all the ratings that was associated to a Mandarin show.
+But its pretty usesless. We want some good data. We want to know what is the average rating for mandarin shows.
+
+```SQL
+    SELECT avg(rating) FROM tv_shows
+    WHERE lang LIKE 'Mandarin'
+```
+
+Ok, this is great. Now we want to know what is the distribution across each rating.
+
+```SQL
+    SELECT rating, count(rating)
+        FROM tv_shows
+        WHERE lang LIKE 'Mandarin'
+        GROUP BY rating
+        ORDER BY count(rating) desc
+```
+
+This query will give us a list of 2 columns that looks like this:
+
+| rating | count(rating) |
+| ------ | ------------- |
+| 3      | 10            |
+| 4      | 8             |
+| 5      | 5             |
+| 2      | 2             |
+| 1      | 1             |
+
+A table with the ratings grouped together and in descending order by the number of rated shows.
+
+Nice, nice. Now we want to know how our top reviewed shows are doing.
+
+```SQL
+    SELECT rating, count(rating)
+        FROM tv_shows
+        -- No `WHERE` cuz we want everything
+        GROUP BY rating
+        HAVING count(rating) > 100
+        ORDER BY count(rating) desc
+```
+
+This should give us a similar table as above but we can be assured that the program only includes shows with a minimum of 101 reviews.
+
+Notice the use of `WHERE` and `HAVING`. To put it simply, `WHERE` tells the script the constrains of the search. `HAVING` tells the script what to show. We can think of it like a pre-search filter vs a results filter.
+
+Oh, and to make the data more presentable, there's an `AS` keyword and it can be used like this:
+
+```SQL
+    SELECT rating AS stars, count(rating) AS reviews
+        FROM tv_shows
+        WHERE lang LIKE 'Mandarin'
+        GROUP BY rating
+        ORDER BY count(rating) desc
+```
+
+And its column name will be changed to this:
+
+| stars | reviews |
+| ----- | ------- |
+| 3     | 10      |
+| 4     | 8       |
+| 5     | 5       |
+| 2     | 2       |
+| 1     | 1       |
+
 #### Types of Joins
 
 There are 4 types of basic joins.
@@ -189,17 +322,9 @@ There are 4 types of basic joins.
 3. Right Join
 4. Outer Join (Full Join)
 
-#### Inner Join
+In this explanation section, we will be working with 2 tables:
 
-Inner join is the default join. -- It need not be specified in the query.
-
-It gives back a set of data that is common to both tables and leaves the rest out. There should not be any `null` values. If it returns `null` means the tables have nothing related to each other.
-
-> A great resource is [this sql doodler](https://joins.spathon.com/)
-
-Lets say we have a 2 tables that looks like this:
-
-Users
+`Users` table
 | ID  | Name   |
 | --- | ------ |
 | 1   | user01 |
@@ -208,7 +333,7 @@ Users
 | 4   | user04 |
 | 5   | user05 |
 
-Likes
+`Likes` table
 | user_id | Like        |
 | ------- | ----------- |
 | 1       | Climbing    |
@@ -216,6 +341,14 @@ Likes
 | 3       | Star Gazing |
 | 4       | Fruits      |
 | 6       | Sports      |
+
+> A great resource is <https://joins.spathon.com>
+
+##### Inner Join
+
+Inner join is the default join. -- It need not be specified in the query.
+
+It gives back a set of data that is common to both tables and leaves the rest out. There should not be any `null` values. If it returns `null` means the tables have nothing related to each other.
 
 The query looks like this:
 
@@ -243,3 +376,58 @@ This is the query result:
 
 Notice that `user02`, `user05` and `Sports` aren't part of the result. This is a property of inner joins.
 Inner Joins drops all non-relatable data and only gives you whatever that matches.
+
+##### Left Join, Right Join & Outer Join
+
+Outer Join or Full Outer Join is used when all the data is needed. No matter if it results in a `NULL` field or not.
+Left Join includes all the values from the left table and if no value is found on the right table, it will populate the result with `NULL`.
+Right Join is the exact opposite of left join. Throwing `NULL` values when the corresponding values on the left table cannot be found.
+
+Unfortunately, mySQL does not natively support `FULL OUTER JOIN`. Therefore, a workaround with `UNION` is required. Here's how it looks like:
+
+```SQL
+-- This is the left outer join query
+SELECT Users.name, likes.likes FROM Users LEFT OUTER JOIN likes ON Users.id = likes.user_id
+UNION
+-- This is the right outer join query
+SELECT Users.name, likes.likes FROM Users RIGHT OUTER JOIN likes ON Users.id = likes.user_id
+```
+
+This is the `OUTER JOIN` query result:
+
+| name   | likes       |
+| ------ | ----------- |
+| user01 | Coding      |
+| user01 | Climbing    |
+| user02 | `NULL`      |
+| user03 | Star Gazing |
+| user04 | Fruits      |
+| user05 | `NULL`      |
+| `NULL` | Sports      |
+
+Notice that values from both the likes and the name columns that do not have a corresponding value is shown as `NULL`.
+
+This is the `LEFT JOIN` query result:
+
+| name   | likes       |
+| ------ | ----------- |
+| user01 | Coding      |
+| user01 | Climbing    |
+| user02 | `NULL`      |
+| user03 | Star Gazing |
+| user04 | Fruits      |
+| user05 | `NULL`      |
+
+And this is the `RIGHT JOIN` query results:
+
+| name   | likes       |
+| ------ | ----------- |
+| user01 | Coding      |
+| user01 | Climbing    |
+| user03 | Star Gazing |
+| user04 | Fruits      |
+| `NULL` | Sports      |
+
+#### Managing multiple tables and relationships
+
+<!-- TO DO -->
