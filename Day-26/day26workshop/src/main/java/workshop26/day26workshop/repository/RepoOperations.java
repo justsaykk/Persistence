@@ -1,10 +1,13 @@
 package workshop26.day26workshop.repository;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -21,17 +24,30 @@ public class RepoOperations {
 
         Query query = new Query();
         List<Document> result = repo.find(query.skip(offset).limit(limit), Document.class, "Games");
-        List<Games> convertedList = new LinkedList<>();
-
-        for (Document gamesDoc : result) {
-            convertedList.add(new Games(gamesDoc));
-        }
-
-        return convertedList;
+        return result.stream().map(
+                gamesDoc -> new Games(gamesDoc))
+                .collect(Collectors.toList());
     }
 
     public long getCount(String collection) {
         return repo.count(new Query(), collection);
     }
 
+    public List<Games> getGamesAsc(Integer limit, Integer offset) {
+        Query query = new Query();
+        List<Document> result = repo.find(
+                query.with(
+                        Sort.by(Sort.Direction.ASC, "ranking"))
+                        .skip(offset)
+                        .limit(limit),
+                Document.class, "Games");
+
+        return result.stream().map(
+                gamesDoc -> new Games(gamesDoc))
+                .collect(Collectors.toList());
+    }
+
+    public Optional<Document> findById(ObjectId docId) {
+        return Optional.ofNullable(repo.findById(docId, Document.class, "Games"));
+    }
 }

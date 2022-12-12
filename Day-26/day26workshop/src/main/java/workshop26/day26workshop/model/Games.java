@@ -32,7 +32,7 @@ public class Games {
 
     public JsonObject toMiniJson() {
         return Json.createObjectBuilder()
-                .add("game_id", Integer.toString(this.gid))
+                .add("game_id", this._id.toString())
                 .add("name", this.name)
                 .build();
     }
