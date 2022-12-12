@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import workshop26.day26workshop.model.GameQuery;
 import workshop26.day26workshop.model.Games;
 import workshop26.day26workshop.service.GamesService;
 
@@ -38,14 +39,13 @@ public class GamesController {
 
         JsonArrayBuilder gamesArr = gamesSvc.getGames(limit, offset);
         Long collectionCount = gamesSvc.getCount("Games");
-        JsonObject response = Json.createObjectBuilder()
-                .add("games", gamesArr)
-                .add("offset", strOffset)
-                .add("limit", strLimit)
-                .add("total", Long.toString(collectionCount))
-                .add("timestamp", instant.toString())
-                .build();
-        return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+        GameQuery response = new GameQuery(
+                strOffset,
+                strLimit,
+                collectionCount,
+                instant.toString(),
+                gamesArr);
+        return new ResponseEntity<String>(response.toJSON().toString(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/rank")
@@ -59,14 +59,13 @@ public class GamesController {
 
         JsonArrayBuilder gamesArr = gamesSvc.getGamesByRank(limit, offset);
         Long collectionCount = gamesSvc.getCount("Games");
-        JsonObject response = Json.createObjectBuilder()
-                .add("games", gamesArr)
-                .add("offset", strOffset)
-                .add("limit", strLimit)
-                .add("total", Long.toString(collectionCount))
-                .add("timestamp", instant.toString())
-                .build();
-        return new ResponseEntity<String>(response.toString(), HttpStatus.OK);
+        GameQuery response = new GameQuery(
+                strOffset,
+                strLimit,
+                collectionCount,
+                instant.toString(),
+                gamesArr);
+        return new ResponseEntity<String>(response.toJSON().toString(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{gameId}")
