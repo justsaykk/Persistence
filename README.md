@@ -79,7 +79,7 @@
 
     Otherwise, there's no other elegant way to seed a database. Good 'ol manual inserts.
 
-    ---------------
+---
 
 ### Connecting the application to the database
 
@@ -200,6 +200,8 @@ public class RsvpRepo {
 ```
 
 Of course, more complicated queries can be constructed. It all depends on the dataset and it's storage complexity.
+
+---
 
 ### SQL Queries
 
@@ -430,4 +432,3 @@ And this is the `RIGHT JOIN` query results:
 
 #### Managing multiple tables and relationships
 
-<!-- TO DO -->
