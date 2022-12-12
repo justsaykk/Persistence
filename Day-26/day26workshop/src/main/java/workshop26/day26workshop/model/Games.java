@@ -25,7 +25,8 @@ public class Games {
         this.name = gamesDocument.getString("name");
         this.year = gamesDocument.getInteger("year");
         this.ranking = gamesDocument.getInteger("ranking");
-        this.users_rated = gamesDocument.getInteger("users_rated");
+        this.users_rated = gamesDocument.getInteger("users_rated") == null ? 0
+                : gamesDocument.getInteger("users_rated");
         this.url = gamesDocument.getString("url");
         this.image = gamesDocument.getString("image");
     }
@@ -39,7 +40,7 @@ public class Games {
 
     public JsonObject toJSON() {
         return Json.createObjectBuilder()
-                .add("_id", this._id.toString())
+                .add("game_id", this._id.toString())
                 .add("gid", Integer.toString(this.gid))
                 .add("name", this.name)
                 .add("year", Integer.toString(this.year))

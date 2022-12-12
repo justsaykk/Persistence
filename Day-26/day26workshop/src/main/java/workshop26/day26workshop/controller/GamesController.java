@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import workshop26.day26workshop.model.Games;
 import workshop26.day26workshop.service.GamesService;
 
 @RestController
@@ -78,6 +79,6 @@ public class GamesController {
                     .add("message", "No Games Found")
                     .build().toString(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<String>(dbResponse.get().toJson().toString(), HttpStatus.OK);
+        return new ResponseEntity<String>(new Games(dbResponse.get()).toJSON().toString(), HttpStatus.OK);
     }
 }
