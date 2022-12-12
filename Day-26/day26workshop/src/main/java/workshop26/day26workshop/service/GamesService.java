@@ -47,4 +47,8 @@ public class GamesService {
         ObjectId docId = new ObjectId(gameId);
         return repo.findById(docId);
     }
+
+    public Optional<Games> getGameByRank(String rank) {
+        return repo.findByRank(rank);
+    }
 }

@@ -6,8 +6,10 @@ import org.bson.types.ObjectId;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Games {
 
     private ObjectId _id;
