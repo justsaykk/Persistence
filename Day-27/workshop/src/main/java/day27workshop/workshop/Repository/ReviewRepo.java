@@ -65,4 +65,11 @@ public class ReviewRepo {
         int updatedCount = (int) updateResult.getModifiedCount();
         return updatedCount;
     }
+
+    public Optional<Document> getOne(String reviewId) {
+        Criteria criteria = Criteria.where("c_id").is(reviewId);
+        Query query = Query.query(criteria);
+        return Optional.ofNullable(
+                template.findOne(query, Document.class, "Comments"));
+    }
 }

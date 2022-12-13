@@ -2,12 +2,12 @@ package day27workshop.workshop.Controllers;
 
 import java.util.Optional;
 
-// import org.joda.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,6 +19,7 @@ import day27workshop.workshop.Models.EditedReview;
 import day27workshop.workshop.Models.NewReview;
 import day27workshop.workshop.Services.ReviewServices;
 import jakarta.json.Json;
+import jakarta.json.JsonObjectBuilder;
 
 @RestController
 @RequestMapping(path = "/review", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -31,9 +32,6 @@ public class BackController {
     public ResponseEntity<String> newReview(
             @RequestBody MultiValueMap<String, String> form) {
         NewReview newReview = new NewReview(form);
-        // Instant instant = new Instant();
-        // newReview.setPosted(instant.toDateTime());
-        // System.out.println(instant.toDateTime().toString());
 
         Optional<NewReview> isPosted = reviewServices.postNewReview(newReview);
         if (isPosted.isEmpty()) {
@@ -53,5 +51,25 @@ public class BackController {
 
         Integer updateReview = reviewServices.updateReview(reviewId, editedReview);
         return new ResponseEntity<String>(Integer.toString(updateReview), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{reviewid}")
+    public ResponseEntity<String> getOneReview(
+            @PathVariable(name = "reviewid") String reviewId) {
+        JsonObjectBuilder dbResponse = reviewServices.getOneReview(reviewId);
+        // TO-DO
+        // Try to add timestamp to this result
+
+        return new ResponseEntity<String>(dbResponse.build().toString(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{reviewid}/history")
+    public ResponseEntity<String> getOneHistory(
+            @PathVariable(name = "reviewid") String c_id) {
+
+        String dbResponse = reviewServices.getOneRHistory(c_id);
+        // TO-DO
+        // Try to add timestamp to this result
+        return new ResponseEntity<String>(dbResponse, HttpStatus.OK);
     }
 }

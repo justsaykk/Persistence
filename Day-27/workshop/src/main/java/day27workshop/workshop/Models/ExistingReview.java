@@ -2,6 +2,8 @@ package day27workshop.workshop.Models;
 
 import org.bson.Document;
 
+import jakarta.json.Json;
+import jakarta.json.JsonObjectBuilder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -21,5 +23,15 @@ public class ExistingReview {
         this.rating = existingReviewDoc.getInteger("rating");
         this.c_text = existingReviewDoc.getString("c_text");
         this.gid = existingReviewDoc.getInteger("gid");
+    }
+
+    public JsonObjectBuilder toJOB() {
+        return Json.createObjectBuilder()
+                .add("c_id", this.c_id)
+                .add("user", this.user)
+                .add("rating", Integer.toString(this.rating))
+                .add("c_text", this.c_text)
+                .add("gid", Integer.toString(this.gid))
+                .add("name", this.name);
     }
 }
