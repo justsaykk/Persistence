@@ -5,19 +5,23 @@ import java.util.Optional;
 // import org.joda.time.Instant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import day27workshop.workshop.Models.EditedReview;
 import day27workshop.workshop.Models.NewReview;
 import day27workshop.workshop.Services.ReviewServices;
 import jakarta.json.Json;
 
 @RestController
-@RequestMapping(path = "/review")
+@RequestMapping(path = "/review", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BackController {
 
     @Autowired
@@ -40,5 +44,14 @@ public class BackController {
                     HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<String>(isPosted.get().toJSON().toString(), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/{reviewid}")
+    public ResponseEntity<String> editReview(
+            @PathVariable(name = "reviewid") String reviewId,
+            @RequestBody EditedReview editedReview) {
+
+        Integer updateReview = reviewServices.updateReview(reviewId, editedReview);
+        return new ResponseEntity<String>(Integer.toString(updateReview), HttpStatus.OK);
     }
 }

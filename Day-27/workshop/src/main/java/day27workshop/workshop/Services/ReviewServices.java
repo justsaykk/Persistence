@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import day27workshop.workshop.Models.EditedReview;
 import day27workshop.workshop.Models.NewReview;
 import day27workshop.workshop.Repository.GameRepo;
 import day27workshop.workshop.Repository.ReviewRepo;
@@ -30,6 +31,15 @@ public class ReviewServices {
         String gameName = gameRepo.getGameName(gid);
         newReview.setName(gameName);
         return Optional.of(reviewRepo.postReview(newReview));
+    }
+
+    public Integer updateReview(String reviewId, EditedReview editedReview) {
+        // Check if review exits
+        if (!reviewRepo.reviewExists(reviewId)) {
+            System.out.println("ReviewID not exists");
+            return 0;
+        }
+        return reviewRepo.updateReview(reviewId, editedReview);
     }
 
 }
