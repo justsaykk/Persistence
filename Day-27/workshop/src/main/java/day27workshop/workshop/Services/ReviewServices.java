@@ -55,7 +55,8 @@ public class ReviewServices {
         }
         Document reviewDoc = reviewDocOpt.get();
         ExistingReview existingReview = new ExistingReview(reviewDoc);
-        existingReview.setName(reviewDoc.getString("name"));
+        String gameName = gameRepo.getGameName(reviewDoc.getInteger("gid"));
+        existingReview.setName(gameName);
         Boolean isEdited = reviewDoc.containsKey("edited");
         return existingReview.toJOB().add("edited", isEdited);
     }
