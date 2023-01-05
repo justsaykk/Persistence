@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sqlpractice.pract.models.Game;
+import com.sqlpractice.pract.models.GameDetail;
 import com.sqlpractice.pract.services.GameService;
 
 @Controller
@@ -35,13 +36,13 @@ public class FrontEnd {
         return "landingpage";
     }
 
-    // @GetMapping(path = "/game/{gameid}")
-    // public String getGameDetailsPage(
-    // @PathVariable(name = "gameid") Integer gameId,
-    // Model model) {
-    // GameDetail gameDetail = gameSvc.getGameDetail(gameId);
-    // model.addAttribute("game", gameDetail);
-    // return "gamedetails";
-    // }
+    @GetMapping(path = "/game/{gameid}")
+    public String getGameDetailsPage(
+    @PathVariable(name = "gameid") Integer gameId,
+    Model model) {
+    GameDetail gameDetail = gameSvc.getGameDetail(gameId);
+    model.addAttribute("game", gameDetail);
+    return "gamedetails";
+    }
 
 }

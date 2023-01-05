@@ -19,7 +19,7 @@ public class GameTable {
     @Autowired
     JdbcTemplate gameTable;
 
-    public Optional<List<Game>> getAllGames(Integer offset) {
+    public Optional<List<Game>> getAllGames(int offset) {
         int limit = 50;
         int skip = limit * (offset - 1);
         SqlRowSet rs = gameTable.queryForRowSet(SQL_GET_ALL_GAMES, limit, skip);
@@ -34,6 +34,12 @@ public class GameTable {
         }
 
         return Optional.of(listOfGames);
+    }
+
+    public SqlRowSet getGameByGid(int gid) {
+        SqlRowSet rs = gameTable.queryForRowSet(SQL_GET_BY_GAMEID, gid);
+        rs.first();
+        return rs;
     }
 
 }
