@@ -496,6 +496,7 @@ Take note that `jdbc:` needs to be in front of the connection string in the envi
 3. Ensure that the correct root folder is selected
 4. Add environment variables to match the application.properties file
 5. Copy the corresponding values from the railway database "Variables" tab
-6. Deploy
+6. (IMPORTANT) Check that all queries are pointing to the correct database
+7. Deploy
 
 And this should be it!
