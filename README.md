@@ -430,5 +430,72 @@ And this is the `RIGHT JOIN` query results:
 | user04 | Fruits      |
 | `NULL` | Sports      |
 
-#### Managing multiple tables and relationships
+### Deployment Notes
 
+Deployment on Railway goes like this:
+
+#### NoSQL
+
+##### Set up Database on railway (MongoDB)
+
+1. Go to Dashboard and create a new project
+2. Click "Provision MongoDB" and wait for the database to be created
+3. Click on the box in the middle of the screen
+4. Connect to the railway database using your preferred data explorer
+5. Seed data using data explorer
+6. Check back at railway to see if data has been successfully seeded
+7. Take note of the "Variables" tab.
+
+##### Configure application.properties file
+
+application.properties
+
+```xml
+spring.data.mongodb.host=${MONGODB_HOST}
+spring.data.mongodb.port=${MONGODB_PORT}
+spring.data.mongodb.username=${MONGODB_USER}
+spring.data.mongodb.password=${MONGODB_PASSWORD}
+spring.data.mongodb.database=BoardGames
+spring.data.mongodb.authentication-database=admin
+```
+
+Take note of the last line. Its especially important.
+Commit and push to github.
+
+#### SQL
+
+#### Set up Database on railway (MySQL)
+
+1. Go to Dashboard and create a new project
+2. Click "Provision MySQL" and wait for the database to be created
+3. Click on the box in the middle of the screen
+4. Connect to the railway database using your preferred data explorer
+5. Seed data using data explorer (Take note to `use railway` to select railway database)
+6. (Optional) Could also create user profiles
+7. Check back at railway to see if data has been successfully seeded
+8. Take note of the "Variables" tab
+
+##### Configure application.yml file
+
+application.yml
+
+```yml
+spring:
+    datasource:
+        url: ${MYSQL_URL}     # jdbc:mysql://localhost:3306/bgg
+        username: ${MYSQL_USERNAME}
+        password: ${MYSQL_PASSWORD}
+```
+
+Take note that `jdbc:` needs to be in front of the connection string in the environment variables.
+
+#### Create application container on Railway
+
+1. Go to Dashboard and create a new project
+2. Click Deploy from GitHub repo
+3. Ensure that the correct root folder is selected
+4. Add environment variables to match the application.properties file
+5. Copy the corresponding values from the railway database "Variables" tab
+6. Deploy
+
+And this should be it!
