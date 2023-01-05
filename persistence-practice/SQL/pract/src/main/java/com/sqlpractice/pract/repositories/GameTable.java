@@ -24,6 +24,8 @@ public class GameTable {
         int skip = limit * (offset - 1);
         SqlRowSet rs = gameTable.queryForRowSet(SQL_GET_ALL_GAMES, limit, skip);
 
+        System.out.println("Data retrieved from DB");
+
         if (!rs.first())
             return Optional.empty();
 
