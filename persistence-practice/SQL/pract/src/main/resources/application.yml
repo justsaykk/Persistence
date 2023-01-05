@@ -3,4 +3,3 @@ spring:
         url: ${MYSQL_URL}
         username: ${MYSQL_USERNAME}
         password: ${MYSQL_PASSWORD}
-        database: ${MYSQL_DATABASE}
